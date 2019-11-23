@@ -4,10 +4,12 @@
   "description": "Making online voting system convenient and easy",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "cross-env NODE_ENV=test nyc mocha --no-timeout './tests/index.js' --exit",
     "dev": "nodemon --exec babel-node src/app.js",
     "start": "npm run build && node build/index.js",
-    "build": "babel src --out-dir build"
+    "build": "babel src --out-dir build",
+    "coverage": "cross-env NODE_ENV=test nyc report --reporter=lcov --reporter=text-lcov | coveralls"
+
   },
   "repository": {
     "type": "git",

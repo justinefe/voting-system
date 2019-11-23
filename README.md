@@ -1,10 +1,8 @@
-Barefoot Nomad - Making company travel and accommodation easy and convenient.
+Online voting system backend - Replacing manual voting system with online voting for easy userabilty, accuracy and efficiency .
 
-[![Reviewed by Hound](https://img.shields.io/badge/Reviewed_by-Hound-8E64B0.svg)](https://houndci.com) 
-[![Build Status](https://travis-ci.org/justinefe/voting-system.svg?branch=develop)](https://travis-ci.org/justinefe/voting-system)
-[![CircleCI](https://circleci.com/gh/justinefe/voting-system.svg?style=svg)](https://circleci.com/gh/justinefe/voting-system)
-[![Coverage Status](https://coveralls.io/repos/github/justinefe/voting-system/badge.svg?branch=develop)](https://coveralls.io/github/justinefe/voting-system?branch=develop)
-[![Maintainability](https://api.codeclimate.com/v1/badges/099c196489f50e8de454/maintainability)](https://codeclimate.com/github/justinefe/voting-system/maintainability)
+[![Build Status](https://travis-ci.com/justinefe/voting-system.svg?branch=master)](https://travis-ci.com/justinefe/voting-system)
+[![Coverage Status](https://coveralls.io/repos/github/justinefe/voting-system/badge.svg?branch=master)](https://coveralls.io/github/justinefe/voting-system?branch=master)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/f702c0e258ea1ba29342/test_coverage)](https://codeclimate.com/github/justinefe/voting-system/test_coverage)
 
 
 ## Vision
