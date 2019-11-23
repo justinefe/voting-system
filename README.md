@@ -1,7 +1,7 @@
-Online voting system backend - Replacing manual voting system with online voting for easy userabilty, accuracy and efficiency .
+Online voting system backend - Replacing manual voting system with online voting for easy userabilty, accuracy and efficiency.
 
-[![Build Status](https://travis-ci.com/justinefe/voting-system.svg?branch=master)](https://travis-ci.com/justinefe/voting-system)
-[![Coverage Status](https://coveralls.io/repos/github/justinefe/voting-system/badge.svg?branch=master)](https://coveralls.io/github/justinefe/voting-system?branch=master)
+[![Build Status](https://travis-ci.com/justinefe/voting-system.svg?branch=develop)](https://travis-ci.com/justinefe/voting-system)
+[![Coverage Status](https://coveralls.io/repos/github/justinefe/voting-system/badge.svg?branch=develop)](https://coveralls.io/github/justinefe/voting-system?branch=develop)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/f702c0e258ea1ba29342/test_coverage)](https://codeclimate.com/github/justinefe/voting-system/test_coverage)
 
 
