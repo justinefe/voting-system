@@ -4,7 +4,7 @@ import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
 import app from '../src/app';
-import verifyRoles from '../src/middlewares/verifyRoles';
+import verifyRoles from '../src/middlewares/VerifyRoles';
 
 chai.use(chaiHttp);
 
@@ -32,7 +32,7 @@ describe('User Role Settings tests', () => {
         done();
       });
   });
-  before('Sign in a Requester', (done) => {
+  before('Sign in a voter', (done) => {
     chai.request(app)
       .post('/api/v1/auth/signin')
       .send({
@@ -92,7 +92,7 @@ describe('User Role Settings tests', () => {
       .set('Authorization', RequesterToken)
       .send({
         email: 'Jessica_Bins@hotmail.com',
-        role: 'Manager'
+        role: 'Candidate'
       })
       .end((err, res) => {
         expect(res).to.have.status(401);
@@ -107,7 +107,7 @@ describe('User Role Settings tests', () => {
       .set('Authorization', supAdminToken)
       .send({
         email: 'Jessica_Bins@hotmail.com',
-        role: 'Manager'
+        role: 'Candidate'
       })
       .end((err, res) => {
         expect(res).to.have.status(200);
@@ -121,7 +121,7 @@ describe('User Role Settings tests', () => {
       .put('/api/v1/admin/assign_permission')
       .set('Authorization', RequesterToken)
       .send({
-        role: 'Manager',
+        role: 'Voter',
         permission: 'create'
       })
       .end((err, res) => {
@@ -136,13 +136,13 @@ describe('User Role Settings tests', () => {
       .put('/api/v1/admin/assign_permission')
       .set('Authorization', supAdminToken)
       .send({
-        role: 'Manager',
+        role: 'Candidate',
         permission: 'create'
       })
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body.status).eql('Success');
-        expect(res.body.message).eql('create permission assigned to Manager successfully');
+        expect(res.body.message).eql('create permission assigned to Candidate successfully');
         done();
       });
   });

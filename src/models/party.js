@@ -7,10 +7,29 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    name: DataTypes.STRING
+    party_name: DataTypes.STRING,
+    phone_number: DataTypes.STRING,
+    address: DataTypes.STRING,
+    status: DataTypes.STRING
   }, {});
-  party.associate = function(models) {
+  party.associate = (models) => {
     // associations can be defined here
+    party.belongsTo(models.User, {
+      as: 'party',
+      foreignKey: 'admin_uuid',
+      onDelete: 'CASCADE',
+      constraints: false
+    });
+    party.hasMany(models.candidate, {
+      as: 'candidate', 
+      foreignKey: 'party_uuid',
+      onDelete: 'CASCADE'
+    });
+    party.belongsToMany(models.User, {
+      through: 'user_party',
+      foreignKey: 'user_uuid',
+      constraints: false
+    });
   };
   return party;
 };

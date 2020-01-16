@@ -12,12 +12,21 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     state: DataTypes.STRING,
-    party: DataTypes.STRING,
+    country: DataTypes.STRING,
+    residential_address: DataTypes.STRING,
+    city: DataTypes.STRING,
     role: DataTypes.STRING,
     role_uuid: {
       type: DataTypes.UUID
     },
+    party_uuid: {
+      type: DataTypes.UUID
+    },
     is_verified: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    is_partisan: {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
@@ -56,12 +65,19 @@ module.exports = (sequelize, DataTypes) => {
     User.hasMany(models.chat, {
       as: 'chat', 
       foreignKey: 'user_uuid',
-      onDelete: 'CASCADE'
+      onDelete: 'CASCADE',
+    });
+   
+    User.hasOne(models.party, {
+      as: 'party',
+      foreignKey: 'admin_uuid',
+      onDelete: 'CASCADE',
+      constraints: false
     });
     User.belongsToMany(models.party, {
-      as: 'user_group', 
       through: 'user_party',
-      foreignKey: 'party_uuid' 
+      foreignKey: 'party_uuid',
+      constraints: false
     });
   };
   return User;

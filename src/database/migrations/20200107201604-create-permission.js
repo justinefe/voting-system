@@ -1,28 +1,15 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('parties', {
+    return queryInterface.createTable('permissions', {
       uuid: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4
+        defaultValue: Sequelize.UUIDV4,
       },
-      party_name: {
+      name: {
         type: Sequelize.STRING
-      },
-      phone_number: {
-        type: Sequelize.STRING
-      },
-      address: {
-        type: Sequelize.STRING
-      },
-      admin_uuid: {
-        type: Sequelize.UUID
-      },
-      status: {
-        type: Sequelize.STRING,
-        defaultValue: 'Pending'
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +22,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('parties');
+    return queryInterface.dropTable('permissions');
   }
 };

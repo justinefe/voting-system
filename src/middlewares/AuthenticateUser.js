@@ -22,7 +22,6 @@ export default async (req, res, next) => {
     const token = rawToken.split(' ')[1];
     const { email } = verifyToken(token);
     const user = await UserRepository.getOne({ email });
-
     if (!user) return sendErrorResponse(res, 403, 'Unauthorized');
     req.userData = user;
     next();

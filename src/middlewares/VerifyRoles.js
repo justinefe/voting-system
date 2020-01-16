@@ -42,7 +42,7 @@ class VerifyRoles {
     const token = req.headers.authorization.split(' ')[1] || req.headers.authorization;
     const userDetail = await verifyToken(token);
     req.userData = userDetail;
-    if (req.userData.role !== 'Requester') {
+    if (req.userData.role === 'Super Administrator') {
       return sendErrorResponse(res, 401, 'Unauthorized access');
     }
     next();

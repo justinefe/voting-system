@@ -21,17 +21,30 @@ module.exports = {
     state: {
       type: Sequelize.STRING
     },
-    party: {
+    city: {
+      type: Sequelize.STRING
+    },
+    residential_address: {
+      type: Sequelize.STRING
+    },
+    country: {
       type: Sequelize.STRING
     },
     role: {
       type: Sequelize.STRING,
-      defaultValue: 'role'
+      defaultValue: 'Voter'
     },
     role_uuid: {
       type: Sequelize.UUID
     },
+    party_uuid: {
+      type: Sequelize.UUID
+    },
     is_verified: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false
+    },
+    is_partisan: {
       type: Sequelize.BOOLEAN,
       defaultValue: false
     },

@@ -1,29 +1,25 @@
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
+import sinon from 'sinon';
+import sendEmail from '@sendgrid/mail';
 import app from '../src/app';
-// import { createToken } from '../src/modules/tokenProcessor';
+
 
 chai.use(chaiHttp);
 
-// after(() => User.destroy({ where: {}, force: true }));
 describe('User', () => {
-  // let newUserToken, newUserUuid, verifiedUserToken, verifiedUserUuid;
-  // before(async () => {
-  //   newUserToken = await createToken({
-  //     uuid: '95ccd25d-2524-4b95-a441-8e2643c4c079',
-  //     email: 'somemail@yahoo.com'
-  //   });
-  //   verifiedUserToken = await createToken({
-  //     uuid: '95ccd25d-2524-4b95-a441-8e2643c4c077',
-  //     email: 'Jessica_Bins@hotmail.com'
-  //   });
-  // });
+  before(() => {
+    sinon.stub(sendEmail, 'send').returnsThis();
+  });
+  after(() => {
+    sinon.restore();
+  });
   it('Should return success for signup POST: /auth/signup', (done) => {
     chai.request(app)
       .post('/api/v1/auth/signup')
       .send({
-        email: 'efejuskltin3@gmail.com',
+        email: 'efejustin3@gmail.com',
         firstName: 'Justinsdfgsdg',
         lastName: 'Igugudfgsdf',
         password: 'Djkladjdfj129',

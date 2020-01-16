@@ -1,7 +1,7 @@
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
 import chaiHttp from 'chai-http';
-import app from '../src/index';
+import app from '../src/app';
 
 chai.use(chaiHttp);
 
@@ -10,7 +10,7 @@ describe('User Signin Tests POST: /api/v1/auth/signin', () => {
     chai.request(app)
       .post('/api/v1/auth/signin')
       .send({
-        email: 'efejustin3@gmail.com',
+        email: 'efe3@gmail.com',
         password: 'Jei12345',
       })
       .end((err, res) => {

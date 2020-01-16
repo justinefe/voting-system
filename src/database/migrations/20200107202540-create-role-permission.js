@@ -1,22 +1,21 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('candidates', {
+    return queryInterface.createTable('role_permissions', {
       uuid: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+        unique: true
       },
-      party_uuid: {
-        type: Sequelize.STRING
+      role_uuid: {
+        type: Sequelize.UUID,
+        allowNull: false
       },
-      officeContesting: {
-        type: Sequelize.STRING
-      },
-      status: {
-        type: Sequelize.STRING,
-        defaultValue: 'Pending'
+      permission_id: {
+        type: Sequelize.UUID,
+        allowNull: false
       },
       createdAt: {
         allowNull: false,
@@ -29,6 +28,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('candidates');
+    return queryInterface.dropTable('role_permissions');
   }
 };

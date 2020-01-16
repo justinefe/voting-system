@@ -6,7 +6,7 @@
 /**
  * @fileoverview Contains the User Auth Repository class, an interface for querying User table
  *
- * @author TeamCyclops
+ * @author TheJust
  *
  * @requires models/User.js
  */
@@ -17,9 +17,8 @@ const {
   User,
   BlackListedToken,
   Role,
-  Permission,
-  RolePermission,
-  Manager
+  permission,
+  role_permission,
 } = Model;
 
 /**
@@ -51,7 +50,6 @@ class UserRepository {
     password,
     email,
     name,
-    designation,
     is_verified,
     image_url = '',
     facebook_id = '',
@@ -61,7 +59,6 @@ class UserRepository {
       const { dataValues } = await this.db.create({
         name,
         email,
-        designation,
         password,
         is_verified,
         image_url,
@@ -122,16 +119,16 @@ class UserRepository {
 
   /**
    *
-   * @param {string} userId
+   * @param {string} changes
    *
-   * @param {object} changes to update for user
+   * @param {object} userId to update for user
    *
    * @returns {object} updated user
    */
-  async update(userId, changes) {
+  async update(changes = {}, userId) {
     try {
       await this.getOne({ uuid: userId });
-      return await User.update(changes, { returning: true, where: { uuid: userId } });
+      return await this.db.update(changes, { where: { uuid: userId } });
     } catch (e) {
       throw new Error(e);
     }
@@ -167,7 +164,7 @@ class UserRepository {
           where: { uuid: roleId }, 
           include: [
             {
-              model: Permission,
+              model: permission,
               as: 'permissions',
               required: true,
               attributes: ['uuid', 'name'],
@@ -189,9 +186,9 @@ class UserRepository {
    */
   async getPermissions() {
     try {
-      const permissions = await Permission.findAll();
+      const permissions = await permission.findAll();
       if (!permissions) return;
-      const permissionNames = permissions.map(permission => permission.dataValues.name);
+      const permissionNames = permissions.map(permits => permits.dataValues.name);
       return permissionNames;
     } catch (error) {
       throw new Error(error);
@@ -211,7 +208,7 @@ class UserRepository {
       const { uuid } = await Role.findOne({ where: { name: newRole } });
       const data = await User.update(
         { role_uuid: uuid, role: newRole },
-        { where: { email }, returning: true, plain: true }
+        { where: { email }, plain: true }
       );
       if (newRole === 'Manager') {
         await Manager.create(
@@ -229,15 +226,15 @@ class UserRepository {
    * 
    * @param {string} role
    * 
-   * @param {string} permission
+   * @param {string} permits
    * 
    * @returns {object} updated user
    */
-  async setPermission(role, permission) {
+  async setPermission(role, permits) {
     try {
       const userRole = await Role.findOne({ where: { name: role } });
-      const userPermission = await Permission.findOne({ where: { name: permission } });
-      const newRolePermission = await RolePermission.create(
+      const userPermission = await permission.findOne({ where: { name: permits } });
+      const newRolePermission = await role_permission.create(
         { role_uuid: userRole.uuid, permission_id: userPermission.uuid }
       );
       return newRolePermission;
@@ -247,28 +244,12 @@ class UserRepository {
   }
 
   /**
-   * @param {*} userId
-   * 
-   * @returns {*} returns a verified user object
+   *  @description findOne is a function that search for an office Location
+   *
+   * @param {object} condition limits the search of the office location
+   *
+   * @returns {object} the details of the office location that has been searched for
    */
-  async verifyUser(userId) {
-    try {
-      const user = await User.update(
-        { is_verified: true },
-        { where: { uuid: userId }, returning: true }
-      );
-      return user;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
-  /* @description findOne is a function that search for an office Location
- *
- * @param {object} condition limits the search of the office location
- *
- * @returns {object} the details of the office location that has been searched for
- */
   // eslint-disable-next-line require-jsdoc
   async findById(condition) {
     try {

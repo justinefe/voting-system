@@ -1,16 +1,22 @@
-'use strict';
 module.exports = (sequelize, DataTypes) => {
   const Role = sequelize.define('Role', {
     uuid: {
-      allowNull: false,
-      primaryKey: true,
       type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true
     },
-    Name: DataTypes.STRING
+    name: DataTypes.STRING
   }, {});
-  Role.associate = function(models) {
-    // associations can be defined here
+  Role.associate = (models) => {
+    Role.hasMany(models.User, {
+      foreignKey: 'role_uuid',
+      as: 'roles'
+    });
+    Role.belongsToMany(models.permission, {
+      through: 'role_permission',
+      as: 'permission',
+      foreignKey: 'Role_uuid'
+    });
   };
   return Role;
 };

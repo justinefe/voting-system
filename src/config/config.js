@@ -4,30 +4,24 @@ config();
 
 module.exports = {
   development: {
-    username: 'root',
-    // use_env_variable: 'DATABASE_URL_DEV',
-    password: 'efe123',
-    database: 'voting',
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    database: process.env.DEV_DATABASE,
     host: '127.0.0.1',
-    dialect: 'mysql',
-  
+    dialect: 'mysql'  
   },
   test: {
-    username: 'root',
-    password: 'efe123',
-    // use_env_variable: 'DATABASE_URL_DEV',
-    database: 'voting_test',
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    database: process.env.TEST_DATABASE,
     host: '127.0.0.1',
-    dialect: 'mysql',
-  
+    dialect: 'mysql'  
   },
   production: {
-    // username: 'root',
-    use_env_variable: 'DATABASE_URL_DEV',
-    // password: 'efe123',
-    // database: 'database_production',
-    // host: '127.0.0.1',
-    dialect: 'mysql',
-  
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+    database: process.env.PRODUCTION_DATABASE,
+    host: '127.0.0.1',
+    dialect: 'mysql'
   }
 };

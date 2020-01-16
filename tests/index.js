@@ -1,18 +1,17 @@
 // FEATURES
 
 // User tests
-import './user.signup.test';/*
+import './user.signup.test';
 import './user.signin.test';
 import './user.signout.test';
-import './user.profile.edit.test';
-import './user.profile.view.test';
+// import './user.profile.edit.test';
+// import './user.profile.view.test';
 import './social.login.test';
 import './userRole.test';
-import './approve.trip.notifiation.test';
 
 // Password reset
 import './passwordReset.test';
-*/
+
 
 // UTILITIES
 

@@ -1,43 +1,46 @@
 import { describe, it } from 'mocha';
 import chai, { expect } from 'chai';
+import sinon from 'sinon';
+import sendEmail from '@sendgrid/mail';
 import chaiHttp from 'chai-http';
 import app from '../src/app';
 import UserRepository from '../src/repositories/UserRepository';
 import { createToken } from '../src/modules/tokenProcessor';
+import { hashPassword } from '../src/utils/hashPassword';
 
 import model from '../src/models';
 
 const { User } = model;
 const testUser = {
-  name: 'John Doe',
+  first_name: 'John',
+  last_name: 'Doe',
   email: 'dieudonneawa7@gmail.com',
-  password: 'workingwithseeds',
-  role: 'employee',
+  password: hashPassword('workingwithseeds'),
   is_verified: true,
   gender: 'male',
-  date_of_birth: '2019-08-28',
-  department: 'research',
-  preferred_language: 'french',
-  preferred_currency: 'FCFA',
-  image_url: 'http://images.com/myimagefile',
-  created_at: new Date(),
-  updated_at: new Date()
 };
 chai.use(chaiHttp);
 
 describe('Password reset Tests', () => {
   let resetToken, userId;
   const email = 'dieudonneawa7@gmail.com';
-  beforeEach(async () => {
-    await User.create(testUser);
-    const { uuid } = await UserRepository.getOne({ email });
-    resetToken = await createToken({ uuid, email });
-    userId = uuid;
+  before(() => {
+    sinon.stub(sendEmail, 'send').returnsThis();
+    async () => {
+      await User.create(testUser);
+      const { uuid } = await UserRepository.getOne({ email });
+      resetToken = await createToken({ uuid, email });
+      userId = uuid;
+    }
   });
+  after(() => {
+    sinon.restore();
+  });
+
   it('"/api/v1/auth/forgot_password" Should send a reset link if email exists and is valid', (done) => {
     chai.request(app)
       .post('/api/v1/auth/forgot_password')
-      .send({ email: 'dieudonneawa7@gmail.com' })
+      .send({ email: 'efejustin3@gmail.com' })
       .end((err, res) => {
         expect(res).to.have.status(200);
         expect(res.body).to.have.property('status').eql('Success');

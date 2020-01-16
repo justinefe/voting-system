@@ -22,7 +22,7 @@ Make electoral processes more easy and convenient with the use of online
 
 ### Installation
 
-- Clone the repo using `git clone https://github.com/andela/cyclops-backend.git`
+- Clone the repo using `git clone https://github.com/justinefe/voting-system.git`
 
 - Run `npm install`
 

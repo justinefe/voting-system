@@ -1,4 +1,4 @@
-// import moment from 'moment';
+import moment from 'moment';
 import { getMIlliSeconds, getDay } from '../utils';
 
 /**
@@ -33,7 +33,7 @@ export const magicTrimmer = payload => {
    */
 export const inValidName = (name, value) => {
   if (!value) return `${name} is required`;
-  if (!/^[A-Za-z]?[A-Za-z]+$/.test(value)) return `${name} is not valid`;
+  if (!/^[a-z]+$/i.test(value)) return `${name} is not valid`;
   return false;
 };
 
@@ -82,6 +82,59 @@ export const inValidDate = (date) => {
   const decision = moment(date, 'MM/DD/YYYY', true).isValid();
   if (!decision) return 'date should be of the form MM/DD/YYYY';
   return false;
+};
+/**
+ * @description inValidAddress is a function that returns address
+ * 
+ * @param {string} address is the parameter
+ * 
+ * @returns {string} the type of data the function returns
+ * 
+ */
+export const inValidAddress = address => {
+  if (!address) return undefined;
+  if (!/^[\w\s-.,]+$/i.test(address)) return `${address} is not valid`;
+  return false; 
+};
+/**
+* @description inValidGender is a function that returns address
+* 
+* @param {string} gender is the parameter
+* 
+* @returns {string} the type of data the function returns
+* 
+*/
+export const inValidGender = gender => {
+  if (!gender) return undefined;
+  gender = gender.toLowerCase();
+  if (gender !== ('male' || 'female')) return `${gender} is not valid`;
+  return false; 
+};
+/**
+* @description inValidPhoneNumber is a function that returns address
+* 
+* @param {string} number is the parameter
+* 
+* @returns {string} the type of data the function returns
+* 
+*/
+export const inValidPhoneNumber = number => {
+  if (!number) return undefined;
+  if (!/^[\d]{8,11}$/.test(number)) return `${number} is not valid`;
+  return false; 
+};
+/**
+* @description inValidPartyName is a function that returns address
+* 
+* @param {string} name is the parameter
+* 
+* @returns {string} the type of data the function returns
+* 
+*/
+export const inValidPartyName = name => {
+  if (!name) return undefined;
+  if (!/^[a-z\s?]{4,}$/.test(name)) return `${name} is not valid`;
+  return false; 
 };
 
 export const inValidDateComparison = (travelDate, returnDate) => {
