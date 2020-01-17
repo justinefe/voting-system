@@ -133,16 +133,24 @@ class AdminController {
    */
   async approveVoterParty(req, res, next) {
     const { uuid } = req.userData;
-    const { party_uuid: partyUuid } = req.params;
+    const { user_uuid } = req.params;
     const { status } = req.body;
     try {
       const { role: adminRequester } = await UserRepository.getOne({ uuid });
-      const { admin_uuid: partyAdmin } = await PartyRepository.getOne({ uuid: partyUuid });
-      if (!partyAdmin) return sendErrorResponse(res, 404, `Party with ID ${partyUuid} does not exist`); 
-      if (adminRequester !== 'Party Administrator' && partyAdmin !== uuid) return sendErrorResponse(res, 401, 'Only party administrator can approve party membership');
-      await UserPartyRepository.update({
-        status,
-      }, partyUuid);
+      const checkUser = await UserPartyRepository.getOne({ user_uuid });
+      if (!checkUser) sendErrorResponse(res, 400, 'User has not made request to join a political party');
+      const { party_uuid: partyUuid } = checkUser;
+      const checkParty = await PartyRepository.getOne({ uuid: partyUuid });
+      const { admin_uuid: partyAdmin } = checkParty;
+      if (adminRequester !== 'Party Administrator' && partyAdmin !== uuid) {
+        return sendErrorResponse(res, 401, 'Only party administrator can approve party membership');
+      }
+      if (status === 'accepted') { 
+        await UserPartyRepository.update({
+          status,
+        }, partyUuid);
+        await UserRepository.update({ party_uuid: partyUuid }, user_uuid); 
+      }
       return successResponse(res, 200, `You have succesfully ${status} a voter request to join party`); 
     } catch (error) {
       next(error);
@@ -174,9 +182,10 @@ class AdminController {
       if (partyAdmin !== 'Party Administrator') return sendErrorResponse(res, 401, 'Only Party Adminstrator can be admin for parties'); 
       const party = await PartyRepository.getOne({ party_name });
       if (!party) return sendErrorResponse(res, 404, `${party_name} does not exist`);
+      const { uuid: partyUuid } = party;
       await PartyRepository.update({
         admin_uuid,
-      }, party_name);
+      }, partyUuid);
       return sendSuccessResponse(res, 200, `Party admin has been assigned to ${party_name}`);
     } catch (error) {
       return next(error);
@@ -198,19 +207,27 @@ class AdminController {
    */
   async approveCandidacy(req, res, next) {
     const { uuid } = req.userData;
-    const { candidacy_uuid: candidacyUuid } = req.params;
-    // const { status } = req.body;
+    const { candidate_uuid: candidacyUuid } = req.params;
+    const { status } = req.body;
     try {
-      const { role: partyAdminRole, uuid: userId } = await UserRepository.getOne({ uuid });
-      if (!partyAdminRole) sendErrorResponse(res, 401, 'You are not authorize to approve a party');
-      const { uuid: partyUuid } = PartyRepository.getOne({ admin_uuid: userId });
-      const test = await PartyRepository.findAll(partyUuid);
-      console.log('TEST', test);
-
-      const { party_uuid } = await CandidateRepository.getOne({ candidacyUuid });
-      if (party_uuid !== partyUuid) return sendErrorResponse(res, 400, 'You are not authorize to approve a party');
-
-      if (partyAdminRole !== 'Party Administrator' && uuid !== partyUuid) return sendErrorResponse(res, 401, 'Only a political party can approve candidacy');     
+      const checkUser = await UserRepository.getOne({ uuid });
+      if (!checkUser) return sendErrorResponse(res, 400, 'Invalid request');
+      const { role: partyAdminRole, uuid: userId } = checkUser;
+      if (partyAdminRole !== 'Party Administrator') return sendErrorResponse(res, 401, 'You are not authorize to approve a candidate');
+      const checkParty = await PartyRepository.getOne({ admin_uuid: userId, status: 'accepted' });
+      if (!checkParty) return sendErrorResponse(res, 404, 'The intended party does not exist or wasn\'t eligible');
+      const { uuid: partyUuid } = checkParty;
+      const checkCandidate = await CandidateRepository.getOne({ 
+        uuid: candidacyUuid, party_uuid: partyUuid 
+      });
+      const { user_uuid } = checkCandidate;
+      console.log(checkCandidate);
+      if (!checkCandidate) return sendErrorResponse(res, 400, 'Only a political party\'s admin can approve a paarties candidate');
+      if (status === 'accepted') {
+        await CandidateRepository.update({ status }, candidacyUuid);
+        await UserRepository.update({ role: 'Candidate' }, user_uuid);
+      }
+      return successResponse(res, 200, `You have succesfully ${status} candidacy`); 
     } catch (error) {
       next(error);
     }
@@ -235,8 +252,8 @@ class AdminController {
     const { status } = req.body;
     try {
       const { role: electAdmin } = await UserRepository.getOne({ uuid });
-      if (!electAdmin) sendErrorResponse(res, 401, 'You are not authorize to approve a party');
-      const party = await PartyRepository.getOne({ party_uuid });
+      if (electAdmin !== 'Election Administrator') sendErrorResponse(res, 401, 'You are not authorize to approve a party');
+      const party = await PartyRepository.getOne({ uuid: party_uuid });
       if (!party) sendErrorResponse(res, 404, 'party can not be found');
       await PartyRepository.update({ status }, party_uuid);
       return sendSuccessResponse(res, 200, `Party has been ${status}`);

@@ -71,10 +71,10 @@ class PartyRepository {
    *
    * @returns {object} updated user
    */
-  async update(changes = {}, partyName) {
+  async update(changes = {}, partUuid) {
     try {
-      await this.getOne({ party_name: partyName });
-      return await this.db.update(changes, { where: { party_name: partyName } });
+      await this.getOne({ uuid: partUuid });
+      return await this.db.update(changes, { where: { uuid: partUuid } });
     } catch (e) {
       throw new Error(e);
     }

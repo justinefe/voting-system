@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     party_uuid: {
       type: DataTypes.UUID
     },
-    is_verified: DataTypes.STRING
+    status: DataTypes.STRING
   }, {});
   user_party.associate = (models) => {
     // associations can be defined here

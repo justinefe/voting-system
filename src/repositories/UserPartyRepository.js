@@ -31,13 +31,31 @@ class UserPartyRepository {
   }
 
   /**
-  * @description Creates a user party account with provided details
-  *
-  * @param {Object} content users details
-  *
-  * @return {Object} returns new user details
-  */
-  async create(field = {}) {
+   * @description Returns party details based on the provided parameters
+   *
+   * @param {Object} condition checks required party parameter
+   *
+   * @param {Object} include adds party 
+   *
+   * @return {Object} returns party details 
+   */
+  async getOne(condition = {}, include = '') {
+    try {
+      return await this.db.findOne({ where: condition, include });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+  
+
+  /**
+   * @description  Creates a candidate
+   * 
+   * @param field describes the object keys and values to be created
+   * 
+   * @returns the created field data
+   */
+  async createOne(field = {}) {
     try {
       await this.db.create(field);
     } catch (error) {

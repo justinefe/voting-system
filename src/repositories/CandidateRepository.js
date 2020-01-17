@@ -32,6 +32,23 @@ class CandidateRepository {
   }
   
   /**
+   * @description Returns party details based on the provided parameters
+   *
+   * @param {Object} condition checks required party parameter
+   *
+   * @param {Object} include adds party 
+   *
+   * @return {Object} returns party details 
+   */
+  async getOne(condition = {}, include = '') {
+    try {
+      return await this.db.findOne({ where: condition, include });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+  
+  /**
    * @description  Creates a candidate
    * 
    * @param field describes the object keys and values to be created
@@ -62,6 +79,23 @@ class CandidateRepository {
       });
     } catch (error) {
       throw new error(error);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async update(changes = {}, userId) {
+    try {
+      await this.getOne({ uuid: userId });
+      return await this.db.update(changes, { where: { uuid: userId } });
+    } catch (e) {
+      throw new Error(e);
     }
   }
 }

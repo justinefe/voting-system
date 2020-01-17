@@ -15,6 +15,7 @@ import Model from '../models';
 
 const {
   User,
+  party,
   BlackListedToken,
   Role,
   permission,
@@ -255,6 +256,30 @@ class UserRepository {
     try {
       const tripRequest = await this.db.findByPk(condition);
       return tripRequest;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *  @description findOne is a function that search for an office Location
+   *
+   * @param {object} condition limits the search of the office location
+   *
+   * @returns {object} the details of the office location that has been searched for
+   */
+  // eslint-disable-next-line require-jsdoc
+  async findOne(condition = {}) {
+    try {
+      return await this.db.findOne({
+        include: [{
+          model: party,
+          through: {
+            attributes: ['createdAt'],
+            where: condition
+          }
+        }]
+      });
     } catch (err) {
       throw new Error(err);
     }

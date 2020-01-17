@@ -26,11 +26,14 @@ class RegistrationController {
     * 
     */
   async voterRegistration(req, res, next) {
-    const {
-      country, state, gender, city, residentialAddress: residential_address, dateOfBirth: date_of_birth 
-    } = req.body;
     const { uuid } = req.userData;
     try {
+      const { state: checkRequest } = await UserRepository.getOne({ uuid });
+      if (checkRequest) sendErrorResponse(res, 400, 'Voter registeration has been done');
+      const {
+        country, state, gender, city, residentialAddress: residential_address,
+        dateOfBirth: date_of_birth 
+      } = req.body;
       await UserRepository.update({
         country, state, city, gender, residential_address, date_of_birth 
       }, uuid);
@@ -56,12 +59,12 @@ class RegistrationController {
     const { officeContesting, partyName } = req.body;
     const { uuid } = req.userData;
     try {
-      const { uuid: politicalParty } = await PartyRepository.getOne({ party_name: partyName });
-      console.log('i am here');
-      if (!politicalParty) return sendErrorResponse(res, 409, `Party ${partyName} does not exists`);
+      const checkParty = await PartyRepository.getOne({ party_name: partyName });
+      if (!checkParty) return sendErrorResponse(res, 409, `Party ${partyName} does not exists`);
+      const { uuid: politicalParty } = checkParty;
       const candidate = await UserRepository.getOne({ uuid, party_uuid: politicalParty });
       if (!candidate) return sendErrorResponse(res, 400, `You are not eligible to contest with ${partyName} as only party members can`);
-      const candidateInfo = { officeContesting, party_uuid: politicalParty };
+      const candidateInfo = { officeContesting, party_uuid: politicalParty, user_uuid: uuid };
       await CandidateRepository.create(candidateInfo);  
       return successResponse(res, 201, `Your registration to contest ${officeContesting} with ${partyName} succesful`);
     } catch (error) {
@@ -113,9 +116,12 @@ class RegistrationController {
     const { partyName: party_name } = req.body;
     const { uuid } = req.userData;
     try {
-      const { uuid: party_uuid } = await PartyRepository.getOne({ party_name });
-      if (!party_uuid) return sendErrorResponse(res, 404, `Party ${party_name} does not exists`);  
-      await UserPartyRepository.create({ party_uuid, user_uuid: uuid });
+      const checkParty = await PartyRepository.getOne({ party_name, status: 'accepted' });
+      if (!checkParty) return sendErrorResponse(res, 404, `Party ${party_name} does not exists`); 
+      const { uuid: party_uuid } = checkParty;
+      const checkRequest = await UserPartyRepository.getOne({ user_uuid: uuid, party_uuid });
+      if (checkRequest) sendErrorResponse(res, 400, 'Request has been previously made');
+      await UserPartyRepository.createOne({ party_uuid, user_uuid: uuid });
       return successResponse(res, 200, `Your request to join ${party_name} succesfully`); 
     } catch (error) {
       next(error);
