@@ -81,21 +81,25 @@ class PartyRepository {
   }
 
   /**
-   * 
+   *
    * @param {string} changes
-   * 
-   * @param 
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
    */
-  async findAll(modelvalue) {
+  async findOne(condition = {}) {
     try {
-      return this.db.findAll({
+      return await this.db.findOne({
         include: [{
+          as: 'candidate',
           model: candidate,
-          where: { uuid: Sequelize.col(`${this.db}.${modelvalue}`) }
+          where: condition,
+          required: false
         }]
       });
-    } catch (error) {
-      throw new error(error);
+    } catch (err) {
+      throw new Error(err);
     }
   }
 }

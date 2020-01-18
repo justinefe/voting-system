@@ -12,7 +12,7 @@
 import Sequelize from 'sequelize';
 import model from '../models';
 
-const { candidate, party } = model;
+const { candidate, party, User } = model;
 
 /**
  * @class
@@ -64,25 +64,6 @@ class CandidateRepository {
   }
 
   /**
-   * 
-   * @param {string} changes
-   * 
-   * @param 
-   */
-  async findAll(modelvalue) {
-    try {
-      return this.db.findAll({
-        include: [{
-          model: party,
-          where: { uuid: Sequelize.col(`${this.db}.${modelvalue}`) }
-        }]
-      });
-    } catch (error) {
-      throw new error(error);
-    }
-  }
-
-  /**
    *
    * @param {string} changes
    *
@@ -94,6 +75,68 @@ class CandidateRepository {
     try {
       await this.getOne({ uuid: userId });
       return await this.db.update(changes, { where: { uuid: userId } });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findOne(condition = {}) {
+    try {
+      return await this.db.findOne({
+        include: [{
+          as: 'user',
+          model: User,
+          where: condition,
+          required: true
+        }]
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findAll() {
+    try {
+      return await this.db.findAll({
+        include: [{
+          as: 'user',
+          model: User
+        }]
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async deleteOne(Item = {}) {
+    try {
+      await this.db.destroy({
+        where: Item,
+      });
     } catch (e) {
       throw new Error(e);
     }

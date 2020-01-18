@@ -221,7 +221,6 @@ class AdminController {
         uuid: candidacyUuid, party_uuid: partyUuid 
       });
       const { user_uuid } = checkCandidate;
-      console.log(checkCandidate);
       if (!checkCandidate) return sendErrorResponse(res, 400, 'Only a political party\'s admin can approve a paarties candidate');
       if (status === 'accepted') {
         await CandidateRepository.update({ status }, candidacyUuid);

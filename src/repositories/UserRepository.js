@@ -12,10 +12,10 @@
  */
 
 import Model from '../models';
-
+// let candidate;
 const {
   User,
-  party,
+  candidate,
   BlackListedToken,
   Role,
   permission,
@@ -273,11 +273,30 @@ class UserRepository {
     try {
       return await this.db.findOne({
         include: [{
-          model: party,
-          through: {
-            attributes: ['createdAt'],
-            where: condition
-          }
+          as: 'candidate',
+          model: candidate,
+          where: condition
+        }]
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *  @description findOne is a function that search for an office Location
+   *
+   * @param {object} condition limits the search of the office location
+   *
+   * @returns {object} the details of the office location that has been searched for
+   */
+  // eslint-disable-next-line require-jsdoc
+  async findAll() {
+    try {
+      return await this.db.findAll({
+        include: [{
+          as: 'candidate',
+          model: candidate,
         }]
       });
     } catch (err) {
