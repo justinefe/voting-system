@@ -6,9 +6,9 @@ import AdminCrontroller from '../controllers/AdminController';
 
 
 const adminRouter = Router();
-adminRouter.patch('/admin/:party_uuid/status', authenticateUser, verifyRoles.verifyRequester, AdminCrontroller.approveVoterParty);
-adminRouter.patch('/admin/:admin_uuid', authenticateUser, verifyRoles.verifyRequester, requestValidator.partyAdminValidation, AdminCrontroller.approvePartyAdmin);
-adminRouter.patch('/admin', authenticateUser, verifyRoles.verifyRequester, requestValidator.approveCandidacyValidation, AdminCrontroller.approveCandidacy);
-adminRouter.patch('/admin/:party_uuid', authenticateUser, verifyRoles.verifyRequester, requestValidator.partyAdminValidation, AdminCrontroller.approveParty);
+adminRouter.patch('/candidate/:candidate_uuid/status', authenticateUser, verifyRoles.verifyRequester, requestValidator.approveCandidacyValidation, AdminCrontroller.approveCandidacy);
+adminRouter.patch('/party/:party_uuid/status', authenticateUser, verifyRoles.verifyRequester, requestValidator.partyAdminValidation, AdminCrontroller.approveParty);
+adminRouter.patch('/user/:user_uuid/status', authenticateUser, verifyRoles.verifyRequester, requestValidator.approveCandidacyValidation, AdminCrontroller.approveVoterParty);
+adminRouter.patch('/admin/:admin_uuid/status', authenticateUser, verifyRoles.verifyRequester, requestValidator.voterJoinValidation, AdminCrontroller.approvePartyAdmin);
 
 export default adminRouter;

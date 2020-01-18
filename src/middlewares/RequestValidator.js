@@ -123,10 +123,10 @@ export default class requestValidator {
    */
   static partyAdminValidation(req, res, next) {
     const {
-      partyName
+      status
     } = req.body;
     const schema = {
-      partyName: inValidPartyName(partyName),
+      status: inValidName('status', status),
     };
         
     const error = validate(schema);
@@ -150,7 +150,7 @@ export default class requestValidator {
       status
     } = req.body;
     const schema = {
-      status: inValidName(status),
+      status: inValidName('status', status),
     };
         
     const error = validate(schema);

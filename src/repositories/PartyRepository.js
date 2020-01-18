@@ -71,31 +71,35 @@ class PartyRepository {
    *
    * @returns {object} updated user
    */
-  async update(changes = {}, partyName) {
+  async update(changes = {}, partUuid) {
     try {
-      await this.getOne({ party_name: partyName });
-      return await this.db.update(changes, { where: { party_name: partyName } });
+      await this.getOne({ uuid: partUuid });
+      return await this.db.update(changes, { where: { uuid: partUuid } });
     } catch (e) {
       throw new Error(e);
     }
   }
 
   /**
-   * 
+   *
    * @param {string} changes
-   * 
-   * @param 
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
    */
-  async findAll(modelvalue) {
+  async findOne(condition = {}) {
     try {
-      return this.db.findAll({
+      return await this.db.findOne({
         include: [{
+          as: 'candidate',
           model: candidate,
-          where: { uuid: Sequelize.col(`${this.db}.${modelvalue}`) }
+          where: condition,
+          required: false
         }]
       });
-    } catch (error) {
-      throw new error(error);
+    } catch (err) {
+      throw new Error(err);
     }
   }
 }

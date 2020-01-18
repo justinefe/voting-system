@@ -1,14 +1,15 @@
 import { config } from 'dotenv';
 
+
 config();
 
 module.exports = {
   development: {
-    username: process.env.USERNAME,
-    password: process.env.PASSWORD,
-    database: process.env.DEV_DATABASE,
+    username: 'root',
+    password: 'efe123',
+    database: 'voting',
     host: '127.0.0.1',
-    dialect: 'mysql'  
+    dialect: 'mysql' 
   },
   test: {
     username: process.env.USERNAME,

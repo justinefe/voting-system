@@ -33,5 +33,4 @@ userRouter.get('/users/:email', authenticateUser, verifyRoles.verifySupAdmin, Ad
 userRouter.put('/admin/assign_role', authenticateUser, verifyRoles.verifySupAdmin, AdminCrontroller.assignRole);
 userRouter.put('/admin/assign_permission', authenticateUser, verifyRoles.verifySupAdmin, AdminCrontroller.assignPermission);
 
-
 export default userRouter;

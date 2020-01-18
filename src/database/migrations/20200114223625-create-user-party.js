@@ -14,7 +14,7 @@ module.exports = {
       party_uuid: {
         type: Sequelize.UUID
       },
-      is_verified: {
+      status: {
         type: Sequelize.STRING,
         defaultValue: 'Pending'
       },

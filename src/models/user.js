@@ -52,6 +52,11 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'user_uuid',
       onDelete: 'CASCADE' 
     });
+    User.hasMany(models.candidate, {
+      as: 'candidate', 
+      foreignKey: 'user_uuid',
+      onDelete: 'CASCADE' 
+    });
     User.hasMany(models.notification, {
       as: 'notification', 
       foreignKey: 'user_uuid',

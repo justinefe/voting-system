@@ -12,9 +12,10 @@
  */
 
 import Model from '../models';
-
+// let candidate;
 const {
   User,
+  candidate,
   BlackListedToken,
   Role,
   permission,
@@ -255,6 +256,49 @@ class UserRepository {
     try {
       const tripRequest = await this.db.findByPk(condition);
       return tripRequest;
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *  @description findOne is a function that search for an office Location
+   *
+   * @param {object} condition limits the search of the office location
+   *
+   * @returns {object} the details of the office location that has been searched for
+   */
+  // eslint-disable-next-line require-jsdoc
+  async findOne(condition = {}) {
+    try {
+      return await this.db.findOne({
+        include: [{
+          as: 'candidate',
+          model: candidate,
+          where: condition
+        }]
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *  @description findOne is a function that search for an office Location
+   *
+   * @param {object} condition limits the search of the office location
+   *
+   * @returns {object} the details of the office location that has been searched for
+   */
+  // eslint-disable-next-line require-jsdoc
+  async findAll() {
+    try {
+      return await this.db.findAll({
+        include: [{
+          as: 'candidate',
+          model: candidate,
+        }]
+      });
     } catch (err) {
       throw new Error(err);
     }

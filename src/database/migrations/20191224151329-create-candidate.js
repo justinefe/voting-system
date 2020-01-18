@@ -4,12 +4,15 @@ module.exports = {
     return queryInterface.createTable('candidates', {
       uuid: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
       },
       party_uuid: {
-        type: Sequelize.STRING
+        type: Sequelize.UUID
+      },
+      user_uuid: {
+        type: Sequelize.UUID
       },
       officeContesting: {
         type: Sequelize.STRING

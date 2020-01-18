@@ -12,7 +12,7 @@
 import Sequelize from 'sequelize';
 import model from '../models';
 
-const { candidate, party } = model;
+const { candidate, party, User } = model;
 
 /**
  * @class
@@ -32,6 +32,23 @@ class CandidateRepository {
   }
   
   /**
+   * @description Returns party details based on the provided parameters
+   *
+   * @param {Object} condition checks required party parameter
+   *
+   * @param {Object} include adds party 
+   *
+   * @return {Object} returns party details 
+   */
+  async getOne(condition = {}, include = '') {
+    try {
+      return await this.db.findOne({ where: condition, include });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+  
+  /**
    * @description  Creates a candidate
    * 
    * @param field describes the object keys and values to be created
@@ -47,21 +64,81 @@ class CandidateRepository {
   }
 
   /**
-   * 
+   *
    * @param {string} changes
-   * 
-   * @param 
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
    */
-  async findAll(modelvalue) {
+  async update(changes = {}, userId) {
     try {
-      return this.db.findAll({
+      await this.getOne({ uuid: userId });
+      return await this.db.update(changes, { where: { uuid: userId } });
+    } catch (e) {
+      throw new Error(e);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findOne(condition = {}) {
+    try {
+      return await this.db.findOne({
         include: [{
-          model: party,
-          where: { uuid: Sequelize.col(`${this.db}.${modelvalue}`) }
+          as: 'user',
+          model: User,
+          where: condition,
+          required: true
         }]
       });
-    } catch (error) {
-      throw new error(error);
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findAll() {
+    try {
+      return await this.db.findAll({
+        include: [{
+          as: 'user',
+          model: User
+        }]
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async deleteOne(Item = {}) {
+    try {
+      await this.db.destroy({
+        where: Item,
+      });
+    } catch (e) {
+      throw new Error(e);
     }
   }
 }
