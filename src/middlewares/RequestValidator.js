@@ -70,6 +70,29 @@ export default class requestValidator {
      *
      * @param {next} next forwards request to the next middleware function
      *
+     * @returns {obj} reurns an response object
+     */
+  static officeValidation(req, res, next) {
+    const {
+      officeName
+    } = req.body;
+    const schema = {
+      officeName: inValidPartyName(officeName),
+    };
+        
+    const error = validate(schema);
+    if (error) return sendErrorResponse(res, 422, error);
+    return next();
+  }
+
+  /**
+     *
+     * @param {req} req object
+     *
+     * @param {res} res object
+     *
+     * @param {next} next forwards request to the next middleware function
+     *
      * @returns {obj} returns an response object
      */
   static candidateValidation(req, res, next) {

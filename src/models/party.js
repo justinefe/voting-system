@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   party.associate = (models) => {
     // associations can be defined here
     party.belongsTo(models.User, {
-      as: 'party',
+      as: 'user',
       foreignKey: 'admin_uuid',
       onDelete: 'CASCADE',
       constraints: false

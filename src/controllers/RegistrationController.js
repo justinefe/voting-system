@@ -3,8 +3,9 @@
 import PartyRepository from '../repositories/PartyRepository';
 import CandidateRepository from '../repositories/CandidateRepository';
 import UserRepository from '../repositories/UserRepository';
+import OfficeRepostitory from '../repositories/OfficeRepository';
 import UserPartyRepository from '../repositories/UserPartyRepository';
-import { sendErrorResponse, successResponse } from '../utils/sendResponse';
+import { sendErrorResponse, successResponse, sendSuccessResponse } from '../utils/sendResponse';
 
 
 /**
@@ -28,8 +29,9 @@ class RegistrationController {
   async voterRegistration(req, res, next) {
     const { uuid } = req.userData;
     try {
-      const { state: checkRequest } = await UserRepository.getOne({ uuid });
-      if (checkRequest) sendErrorResponse(res, 400, 'Voter registeration has been done');
+      const checkRequest = await UserRepository.getOne({ uuid });
+      const { state: voterState } = checkRequest;
+      if (voterState) sendErrorResponse(res, 400, 'Voter registeration has been done');
       const {
         country, state, gender, city, residentialAddress: residential_address,
         dateOfBirth: date_of_birth 
@@ -102,16 +104,16 @@ class RegistrationController {
   }
 
   /**
- * @description registers political parties
- * 
- * @param {method} req - request body object
- * 
- * @param  {method} res - response body object
- * 
- * @param  {method} next- passes command to next middleware
- * 
- * @returns returns the value of the function
- */
+   * @description registers political parties
+   * 
+   * @param {method} req - request body object
+   * 
+   * @param  {method} res - response body object
+   * 
+   * @param  {method} next- passes command to next middleware
+   * 
+   * @returns returns the value of the function
+   */
   async voterJoinParty(req, res, next) {
     const { partyName: party_name } = req.body;
     const { uuid } = req.userData;
@@ -123,6 +125,31 @@ class RegistrationController {
       if (checkRequest) sendErrorResponse(res, 400, 'Request has been previously made');
       await UserPartyRepository.createOne({ party_uuid, user_uuid: uuid });
       return successResponse(res, 200, `Your request to join ${party_name} succesfully`); 
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @description assigns permissions to role
+   *
+   * @param {object} req request object
+   *
+   * @param {object} res response object
+   *
+   * @param {object} next passes control to the  next middleware
+   *
+   * @returns {object} returns a response containing the user object
+   * 
+   * @memberof AdminController
+   */
+  async createOffice(req, res, next) {
+    const { officeName } = req.body;
+    try {
+      const checkOffice = await OfficeRepostitory.getOne({ name: officeName });
+      if (checkOffice) return sendErrorResponse(res, 400, `${officeName} Office already existed`);
+      await OfficeRepostitory.create({ name: officeName });
+      return sendSuccessResponse(res, 201, `${officeName} created succesfully`);
     } catch (error) {
       next(error);
     }

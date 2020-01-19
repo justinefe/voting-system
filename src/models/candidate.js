@@ -18,6 +18,10 @@ module.exports = (sequelize, DataTypes) => {
       as: 'user', 
       foreignKey: 'user_uuid' 
     });
+    candidate.hasOne(models.vote, {
+      as: 'vote', 
+      foreignKey: 'candidate_uuid' 
+    });
     // associations can be defined here
   };
   return candidate;

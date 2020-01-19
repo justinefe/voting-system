@@ -7,6 +7,7 @@ import registration from './registration';
 import candidate from './candidate';
 // import notifications from './notifications';
 import adminnistration from './adminisrtation';
+import vote from './vote';
 
 
 export default (app) => {
@@ -15,7 +16,7 @@ export default (app) => {
     data: 'Welcome to the online voting system API'
   }));
 
-  app.use('/api/v1', [user, registration, adminnistration, candidate]);
+  app.use('/api/v1', [user, registration, adminnistration, candidate, vote]);
 
   // Add notification endpoints to application
   //   app.use('/api/v1/notifications', notifications);

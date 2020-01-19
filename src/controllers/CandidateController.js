@@ -2,10 +2,11 @@
 import { sendSuccessResponse, sendErrorResponse, successResponse } from '../utils/sendResponse';
 import { inValidEmail } from '../modules/validator';
 
+import OfficeRepository from '../repositories/OfficeRepository';
 import CandidateRepository from '../repositories/CandidateRepository';
 import UserRepository from '../repositories/UserRepository';
 import PartyRepository from '../repositories/PartyRepository';
-import UserPartyRepository from '../repositories/UserPartyRepository';
+import VoteRepository from '../repositories/VoteRepository';
 
 /**
  * Ezekiel 21:27
@@ -116,53 +117,11 @@ class CandidateController {
     const { uuid } = req.userData;
     try {
       const checkPartyAdmin = await PartyRepository.findOne({ uuid: candidateUuid });
+      if (!checkPartyAdmin) return sendErrorResponse(res, 404, 'Candidate does\'t exist');
       const { admin_uuid: adminUuid } = checkPartyAdmin;
       if (uuid !== adminUuid) return sendErrorResponse(res, 401, 'You are not eligible to delete this candidate');
       await CandidateRepository.deleteOne({ uuid: candidateUuid });
       return sendSuccessResponse(res, 200, 'You have succesfully deleted candidate');
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  /**
-   * @description Assign roles to users
-   *
-   * @param {*} req - Request Object
-   *
-   * @param {*} res - Response Object
-   * 
-   * @param {next} next - passes control to the middlewware
-   *
-   * @returns {object} - returns a response object
-   *
-   * @memberof AdminController
-   */
-  async voteACandidate(req, res, next) {
-    const { candidateUuid } = req.params;
-    try {
-      
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  /**
-   * @description Assign roles to users
-   *
-   * @param {*} req - Request Object
-   *
-   * @param {*} res - Response Object
-   * 
-   * @param {next} next - passes control to the middlewware
-   *
-   * @returns {object} - returns a response object
-   *
-   * @memberof AdminController
-   */
-  async setVotingDeadLine(req, res, next) {
-    try {
-
     } catch (error) {
       next(error);
     }

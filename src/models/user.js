@@ -47,11 +47,6 @@ module.exports = (sequelize, DataTypes) => {
   });
   User.associate = (models) => {
     // associations can be defined here
-    User.hasMany(models.vote, {
-      as: 'vote', 
-      foreignKey: 'user_uuid',
-      onDelete: 'CASCADE' 
-    });
     User.hasMany(models.candidate, {
       as: 'candidate', 
       foreignKey: 'user_uuid',
@@ -83,6 +78,11 @@ module.exports = (sequelize, DataTypes) => {
       through: 'user_party',
       foreignKey: 'party_uuid',
       constraints: false
+    });
+    User.hasMany(models.vote, {
+      as: 'vote', 
+      foreignKey: 'voter_uuid',
+      onDelete: 'CASCADE',
     });
   };
   return User;
