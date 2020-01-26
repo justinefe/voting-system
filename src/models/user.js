@@ -26,11 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    is_partisan: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+    // is_partisan: {
+    //   type: DataTypes.BOOLEAN,
+    //   defaultValue: false
+    // },
     gender: DataTypes.STRING,
+    voted: DataTypes.STRING,
     date_of_birth: DataTypes.STRING,
     createdAt: {
       type: DataTypes.DATE,
@@ -79,10 +80,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'party_uuid',
       constraints: false
     });
-    User.hasMany(models.vote, {
-      as: 'vote', 
-      foreignKey: 'voter_uuid',
-      onDelete: 'CASCADE',
+    User.belongsTo(models.office_position, {
+      as: 'office',
+      foreignKey: 'is_partisan',
+      constraints: false
     });
   };
   return User;

@@ -64,9 +64,14 @@ class RegistrationController {
       const checkParty = await PartyRepository.getOne({ party_name: partyName });
       if (!checkParty) return sendErrorResponse(res, 409, `Party ${partyName} does not exists`);
       const { uuid: politicalParty } = checkParty;
+      const checkOffice = await OfficeRepostitory.getOne({ name: officeContesting });
+      if (!checkOffice) return sendErrorResponse(res, 404, `${officeContesting} can not be found`);
+      const { uuid: officeUuid } = checkOffice;
       const candidate = await UserRepository.getOne({ uuid, party_uuid: politicalParty });
       if (!candidate) return sendErrorResponse(res, 400, `You are not eligible to contest with ${partyName} as only party members can`);
-      const candidateInfo = { officeContesting, party_uuid: politicalParty, user_uuid: uuid };
+      const candidateInfo = {
+        officeContesting, party_uuid: politicalParty, user_uuid: uuid, office_uuid: officeUuid 
+      };
       await CandidateRepository.create(candidateInfo);  
       return successResponse(res, 201, `Your registration to contest ${officeContesting} with ${partyName} succesful`);
     } catch (error) {

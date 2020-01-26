@@ -137,14 +137,11 @@ export const inValidPartyName = name => {
   return false; 
 };
 
-export const inValidDateComparison = (travelDate, returnDate) => {
-  const travelDateMilliSec = getMIlliSeconds(travelDate);
+export const inValidDateComparison = (travelDate) => {
+  const stopageTimeInMillisecode = getMIlliSeconds(travelDate);
   const todayDateMilliSec = getMIlliSeconds();
-  const travelDay = getDay(travelDate);
-  const returnDay = getDay(returnDate);
-  if (travelDateMilliSec <= todayDateMilliSec) return 'Your travel date must be a future date';
-  if (returnDay < travelDay) return 'You cannot enter a return date that is before your travel date';
-  return false;
+  if (stopageTimeInMillisecode <= todayDateMilliSec) return 'Your vote stopage date must be future';
+  return stopageTimeInMillisecode;
 };
 
 export const validate = obj => {

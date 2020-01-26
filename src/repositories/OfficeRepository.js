@@ -11,7 +11,7 @@
  */
 import model from '../models';
 
-const { office_position: office, candidate } = model;
+const { office_position: office, candidate, User } = model;
 
 /**
  * @class
@@ -118,6 +118,38 @@ class CandidateRepository {
           model: User
         }]
       });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findAllOffice() {
+    try {
+      return await this.db.findAll();
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findAllCandidate() {
+    try {
+      return await this.db.findAll();
     } catch (err) {
       throw new Error(err);
     }

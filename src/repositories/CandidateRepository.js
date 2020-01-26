@@ -80,6 +80,22 @@ class CandidateRepository {
     }
   }
 
+ /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findAllCandidate() {
+    try {
+      return await this.db.findAll();
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
   /**
    *
    * @param {string} changes
@@ -118,6 +134,24 @@ class CandidateRepository {
           as: 'user',
           model: User
         }]
+      });
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findAccepted(condition = {}) {
+    try {
+      return await this.db.findAll({
+        where: condition
       });
     } catch (err) {
       throw new Error(err);

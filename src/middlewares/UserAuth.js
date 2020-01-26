@@ -21,7 +21,7 @@ export default class userAuth {
     const userData = magicTrimmer(req.body);
     const {
       // eslint-disable-next-line camelcase
-      firstName: first_name, lastName: last_name, email, password
+      first_name, last_name, email, password
     } = userData;
     const schema = {
       first_name: inValidName('first_name', first_name),

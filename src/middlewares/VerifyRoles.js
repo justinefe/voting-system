@@ -63,6 +63,7 @@ class VerifyRoles {
     const token = req.headers.authorization.split(' ')[1] || req.headers.authorization;
     const userDetail = await verifyToken(token);
     req.userData = userDetail;
+    console.log('object', userDetail);
     if (req.userData.role !== 'Election Administrator') {
       return sendErrorResponse(res, 401, 'Unauthorized access');
     }
@@ -105,6 +106,7 @@ class VerifyRoles {
     const token = req.headers.authorization.split(' ')[1] || req.headers.authorization;
     const userDetail = await verifyToken(token);
     req.userData = userDetail;
+    console.log(req.userData, 'gggggggggggg');
     if (req.userData.role !== ('Voter' || 'Candidate')) {
       return sendErrorResponse(res, 401, 'Unauthorized access');
     }

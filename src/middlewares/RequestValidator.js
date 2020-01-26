@@ -170,6 +170,31 @@ export default class requestValidator {
    */
   static approveCandidacyValidation(req, res, next) {
     const {
+      status, officeContesting
+    } = req.body;
+    const schema = {
+      status: inValidName('status', status),
+      officeContesting: inValidName('officeContesting', officeContesting),
+    };
+        
+    const error = validate(schema);
+    if (error) return sendErrorResponse(res, 422, error);
+    return next();
+  }
+
+  /**
+   * @descrption handles a voter join a political party
+   * 
+   * @param {req} req handles the request body
+   * 
+   * @param {res} res object
+   *
+   * @param {next} next forwards request to the next middleware function
+   *
+   * @returns {obj} returns an response object
+   */
+  static approvePartyValidation(req, res, next) {
+    const {
       status
     } = req.body;
     const schema = {

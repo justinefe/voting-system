@@ -28,27 +28,25 @@ class AuthController {
   async signup({ protocol, headers, body }, res, next) {
     try {
       const userData = magicTrimmer(body);
-      const { email, first_name, last_name } = userData;
+      const { email } = userData;
       const result = await UserRepository.getOne({ email });
       if (!result) {
         body.password = hashPassword(body.password);
-        const newUser = await UserRepository.create(body);
+        const newUser = await UserRepository.create(userData);
         const token = createToken(
           {
             uuid: newUser.uuid,
-            first_name,
-            last_name,
             email,
-            role: newUser.role
+            role: 'Voter'
           }
         );
         newUser.token = token;
-        const link = `${protocol}//${headers.host}/api/v1/auth/confirm_email?token=${token}&id=${newUser.uuid}`;
-        await sendEmail(
-          email,
-          'Thejust Online Voting System Verification',
-          `Please kindly click on the link below to verify your account <br/> ${link}`
-        );
+        // const link = `${protocol}//${headers.host}/api/v1/auth/confirm_email?token=${token}&id=${newUser.uuid}`;
+        // await sendEmail(
+        //   email,
+        //   'Thejust Online Voting System Verification',
+        //   `Please kindly click on the link below to verify your account <br/> ${link}`
+        // );
         const userInformation = {
           message: 'User account created successfully',
           token
@@ -117,7 +115,7 @@ class AuthController {
         image_url: image,
         facebook_id: (provider === 'facebook' ? social_id : ''),
         google_id: (provider === 'google' ? social_id : ''),
-        role: 'employee'
+        role: 'Voter'
       });
       return sendSuccessResponse(res, 201, userInfo(newUser));
     } catch (err) {
@@ -139,16 +137,19 @@ class AuthController {
   async signin({ body }, res) {
     const { email, password } = body;
     const foundUser = await UserRepository.getOne({ email });
+
     if (!foundUser) return sendErrorResponse(res, 404, 'User not found');
+
     const confirmPassword = unhashPassword(password, foundUser.dataValues.password);
+
     if (!confirmPassword) return sendErrorResponse(res, 400, 'Incorrect Password');
-    if (!foundUser.dataValues.is_verified) return sendErrorResponse(res, 401, 'Verify Your Account');
+    // if (!foundUser.dataValues.is_verified) return sendErrorResponse(res, 401, 'Verify Your Account');
+    
     const token = await createToken(
       {
         uuid: foundUser.uuid,
         role: foundUser.role,
         email: foundUser.email,
-        role_uuid: foundUser.role_uuid
       }
     );
     const userInformation = {

@@ -8,13 +8,14 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4
       },
+      votes: {
+        defaultValue: 0,
+        type: Sequelize.INTEGER
+      },
       office_uuid: {
         type: Sequelize.UUID
       },
       candidate_uuid: {
-        type: Sequelize.UUID
-      },
-      voter_uuid: {
         type: Sequelize.UUID
       },
       createdAt: {

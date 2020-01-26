@@ -11,9 +11,17 @@ module.exports = (sequelize, DataTypes) => {
   }, {});
   office_position.associate = (models) => {
     // associations can be defined here
-    office_position.hasOne(models.vote, {
+    office_position.hasMany(models.vote, {
       as: 'vote', 
       foreignKey: 'office_uuid' 
+    });
+    office_position.hasMany(models.candidate, {
+      as: 'candidate', 
+      foreignKey: 'office_uuid' 
+    });
+    office_position.hasMany(models.User, {
+      as: 'user', 
+      foreignKey: 'is_partisan' 
     });
   };
   return office_position;

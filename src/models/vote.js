@@ -7,14 +7,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
+    votes: DataTypes.INTEGER
   }, {});
   vote.associate = models => {
-    vote.belongsTo(models.User, {
-      as: 'user',
-      foreignKey: 'voter_uuid',
-      onDelete: 'CASCADE',
-      constraints: false
-    });
     vote.belongsTo(models.candidate, {
       as: 'candidate', 
       foreignKey: 'candidate_uuid',
