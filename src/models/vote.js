@@ -7,9 +7,20 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    today: DataTypes.STRING
+    votes: DataTypes.INTEGER
   }, {});
-  vote.associate = function(models) {
+  vote.associate = models => {
+    vote.belongsTo(models.candidate, {
+      as: 'candidate', 
+      foreignKey: 'candidate_uuid',
+      onDelete: 'CASCADE'
+    });
+    vote.belongsTo(models.office_position, {
+      as: 'office',
+      foreignKey: 'office_uuid',
+      onDelete: 'CASCADE',
+      constraints: false
+    });
     // associations can be defined here
   };
   return vote;

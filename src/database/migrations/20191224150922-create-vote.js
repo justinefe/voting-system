@@ -2,14 +2,21 @@
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.createTable('Votes', {
-      id: {
+      uuid: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4
+      },
+      votes: {
+        defaultValue: 0,
         type: Sequelize.INTEGER
       },
-      today: {
-        type: Sequelize.STRING
+      office_uuid: {
+        type: Sequelize.UUID
+      },
+      candidate_uuid: {
+        type: Sequelize.UUID
       },
       createdAt: {
         allowNull: false,

@@ -3,8 +3,9 @@
 import PartyRepository from '../repositories/PartyRepository';
 import CandidateRepository from '../repositories/CandidateRepository';
 import UserRepository from '../repositories/UserRepository';
+import OfficeRepostitory from '../repositories/OfficeRepository';
 import UserPartyRepository from '../repositories/UserPartyRepository';
-import { sendErrorResponse, successResponse } from '../utils/sendResponse';
+import { sendErrorResponse, successResponse, sendSuccessResponse } from '../utils/sendResponse';
 
 
 /**
@@ -28,8 +29,9 @@ class RegistrationController {
   async voterRegistration(req, res, next) {
     const { uuid } = req.userData;
     try {
-      const { state: checkRequest } = await UserRepository.getOne({ uuid });
-      if (checkRequest) sendErrorResponse(res, 400, 'Voter registeration has been done');
+      const checkRequest = await UserRepository.getOne({ uuid });
+      const { state: voterState } = checkRequest;
+      if (voterState) sendErrorResponse(res, 400, 'Voter registeration has been done');
       const {
         country, state, gender, city, residentialAddress: residential_address,
         dateOfBirth: date_of_birth 
@@ -62,9 +64,14 @@ class RegistrationController {
       const checkParty = await PartyRepository.getOne({ party_name: partyName });
       if (!checkParty) return sendErrorResponse(res, 409, `Party ${partyName} does not exists`);
       const { uuid: politicalParty } = checkParty;
+      const checkOffice = await OfficeRepostitory.getOne({ name: officeContesting });
+      if (!checkOffice) return sendErrorResponse(res, 404, `${officeContesting} can not be found`);
+      const { uuid: officeUuid } = checkOffice;
       const candidate = await UserRepository.getOne({ uuid, party_uuid: politicalParty });
       if (!candidate) return sendErrorResponse(res, 400, `You are not eligible to contest with ${partyName} as only party members can`);
-      const candidateInfo = { officeContesting, party_uuid: politicalParty, user_uuid: uuid };
+      const candidateInfo = {
+        officeContesting, party_uuid: politicalParty, user_uuid: uuid, office_uuid: officeUuid 
+      };
       await CandidateRepository.create(candidateInfo);  
       return successResponse(res, 201, `Your registration to contest ${officeContesting} with ${partyName} succesful`);
     } catch (error) {
@@ -102,16 +109,16 @@ class RegistrationController {
   }
 
   /**
- * @description registers political parties
- * 
- * @param {method} req - request body object
- * 
- * @param  {method} res - response body object
- * 
- * @param  {method} next- passes command to next middleware
- * 
- * @returns returns the value of the function
- */
+   * @description registers political parties
+   * 
+   * @param {method} req - request body object
+   * 
+   * @param  {method} res - response body object
+   * 
+   * @param  {method} next- passes command to next middleware
+   * 
+   * @returns returns the value of the function
+   */
   async voterJoinParty(req, res, next) {
     const { partyName: party_name } = req.body;
     const { uuid } = req.userData;
@@ -123,6 +130,31 @@ class RegistrationController {
       if (checkRequest) sendErrorResponse(res, 400, 'Request has been previously made');
       await UserPartyRepository.createOne({ party_uuid, user_uuid: uuid });
       return successResponse(res, 200, `Your request to join ${party_name} succesfully`); 
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @description assigns permissions to role
+   *
+   * @param {object} req request object
+   *
+   * @param {object} res response object
+   *
+   * @param {object} next passes control to the  next middleware
+   *
+   * @returns {object} returns a response containing the user object
+   * 
+   * @memberof AdminController
+   */
+  async createOffice(req, res, next) {
+    const { officeName } = req.body;
+    try {
+      const checkOffice = await OfficeRepostitory.getOne({ name: officeName });
+      if (checkOffice) return sendErrorResponse(res, 400, `${officeName} Office already existed`);
+      await OfficeRepostitory.create({ name: officeName });
+      return sendSuccessResponse(res, 201, `${officeName} created succesfully`);
     } catch (error) {
       next(error);
     }

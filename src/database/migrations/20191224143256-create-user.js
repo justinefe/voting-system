@@ -12,6 +12,9 @@ module.exports = {
     last_name: {
       type: Sequelize.STRING
     },
+    voted: {
+      type: Sequelize.STRING
+    },
     email: {
       type: Sequelize.STRING
     },

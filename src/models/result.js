@@ -7,7 +7,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4
     },
-    party: DataTypes.STRING
+    name: DataTypes.STRING,
+    officeContested: DataTypes.STRING,
+    votes: DataTypes.INTEGER,
+    total_votes: DataTypes.INTEGER,
+    election_name: DataTypes.STRING
   }, {});
   Result.associate = function(models) {
     // associations can be defined here

@@ -14,6 +14,9 @@ module.exports = {
       user_uuid: {
         type: Sequelize.UUID
       },
+      office_uuid: {
+        type: Sequelize.UUID
+      },
       officeContesting: {
         type: Sequelize.STRING
       },

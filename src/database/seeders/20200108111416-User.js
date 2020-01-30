@@ -50,7 +50,7 @@ module.exports = {
     },
     {
       uuid: uuid(),
-      email: 'partyadmin@hotmail.com',
+      email: 'party@gmail.com',
       password: hashPassword('Password123'),
       first_name: 'party',
       last_name: ' people',
@@ -61,7 +61,7 @@ module.exports = {
     },
     {
       uuid: uuid(),
-      email: 'electiondmin@hotmail.com',
+      email: 'election@gmail.com',
       password: hashPassword('Password123'),
       first_name: 'election',
       last_name: ' admin',

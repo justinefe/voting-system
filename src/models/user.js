@@ -26,11 +26,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    is_partisan: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false
-    },
+    // is_partisan: {
+    //   type: DataTypes.BOOLEAN,
+    //   defaultValue: false
+    // },
     gender: DataTypes.STRING,
+    voted: DataTypes.STRING,
     date_of_birth: DataTypes.STRING,
     createdAt: {
       type: DataTypes.DATE,
@@ -47,11 +48,6 @@ module.exports = (sequelize, DataTypes) => {
   });
   User.associate = (models) => {
     // associations can be defined here
-    User.hasMany(models.vote, {
-      as: 'vote', 
-      foreignKey: 'user_uuid',
-      onDelete: 'CASCADE' 
-    });
     User.hasMany(models.candidate, {
       as: 'candidate', 
       foreignKey: 'user_uuid',
@@ -82,6 +78,11 @@ module.exports = (sequelize, DataTypes) => {
     User.belongsToMany(models.party, {
       through: 'user_party',
       foreignKey: 'party_uuid',
+      constraints: false
+    });
+    User.belongsTo(models.office_position, {
+      as: 'office',
+      foreignKey: 'is_partisan',
       constraints: false
     });
   };

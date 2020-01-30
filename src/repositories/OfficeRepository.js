@@ -7,12 +7,11 @@
  *
  * @author TheJust
  *
- * @requires models/candidate.js
+ * @requires models/office_position.js
  */
-import Sequelize from 'sequelize';
 import model from '../models';
 
-const { candidate, party, User } = model;
+const { office_position: office, candidate, User } = model;
 
 /**
  * @class
@@ -28,7 +27,7 @@ class CandidateRepository {
     *
     */
   constructor() {
-    this.db = candidate;
+    this.db = office;
   }
   
   /**
@@ -80,22 +79,6 @@ class CandidateRepository {
     }
   }
 
- /**
-   *
-   * @param {string} changes
-   *
-   * @param {object} userId to update for user
-   *
-   * @returns {object} updated user
-   */
-  async findAllCandidate() {
-    try {
-      return await this.db.findAll();
-    } catch (err) {
-      throw new Error(err);
-    }
-  }
-
   /**
    *
    * @param {string} changes
@@ -108,8 +91,8 @@ class CandidateRepository {
     try {
       return await this.db.findOne({
         include: [{
-          as: 'user',
-          model: User,
+          as: 'candidate',
+          model: candidate,
           where: condition,
           required: true
         }]
@@ -148,11 +131,25 @@ class CandidateRepository {
    *
    * @returns {object} updated user
    */
-  async findAccepted(condition = {}) {
+  async findAllOffice() {
     try {
-      return await this.db.findAll({
-        where: condition
-      });
+      return await this.db.findAll();
+    } catch (err) {
+      throw new Error(err);
+    }
+  }
+
+  /**
+   *
+   * @param {string} changes
+   *
+   * @param {object} userId to update for user
+   *
+   * @returns {object} updated user
+   */
+  async findAllCandidate() {
+    try {
+      return await this.db.findAll();
     } catch (err) {
       throw new Error(err);
     }

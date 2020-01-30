@@ -14,9 +14,17 @@ module.exports = (sequelize, DataTypes) => {
       as: 'party', 
       foreignKey: 'party_uuid' 
     });
+    candidate.belongsTo(models.office_position, {
+      as: 'office', 
+      foreignKey: 'office_uuid' 
+    });
     candidate.belongsTo(models.User, {
       as: 'user', 
       foreignKey: 'user_uuid' 
+    });
+    candidate.hasOne(models.vote, {
+      as: 'vote', 
+      foreignKey: 'candidate_uuid' 
     });
     // associations can be defined here
   };
