@@ -1,12 +1,14 @@
 import passport from 'passport';
 import FacebookPassport from 'passport-facebook';
-import GooglePassport from 'passport-google-oauth').OAuthStrategy;
+import GooglePassport from 'passport-google-oauth20';
+
 import { config } from 'dotenv';
 
 config();
 
 const FacebookStrategy = FacebookPassport.Strategy;
-const GoogleStrategy = GooglePassport.OAuthStrategy;
+const GoogleStrategy = GooglePassport.Strategy;
+
 /**
  * 
  * @description A function to obtain user prifile
@@ -16,7 +18,9 @@ const GoogleStrategy = GooglePassport.OAuthStrategy;
 
 const userProfile = profile => {
   const {
-    id, provider, photos, emails, displayName: username, givenName: first_name, familyName: last_name
+    // eslint-disable-next-line camelcase
+    id, provider, photos, emails, displayName: username,
+    givenName: first_name, familyName: last_name
   } = profile;
   let imageUrl = '';
   let email = '';
