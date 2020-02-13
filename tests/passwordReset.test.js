@@ -31,7 +31,7 @@ describe('Password reset Tests', () => {
       const { uuid } = await UserRepository.getOne({ email });
       resetToken = await createToken({ uuid, email });
       userId = uuid;
-    }
+    };
   });
   after(() => {
     sinon.restore();

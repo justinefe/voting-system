@@ -129,6 +129,8 @@ class AdminController {
    *
    * @returns {object} returns a response containing the user object
    * 
+   * tesing something
+   * 
    * @memberof AdminController
    */
   async approveVoterParty(req, res, next) {

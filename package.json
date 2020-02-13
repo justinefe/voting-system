@@ -8,11 +8,15 @@
     "test": "cross-env NODE_ENV=test nyc mocha --no-timeout './tests/index.js' --exit",
     "test:report": "cross-env NODE_ENV=test npm run db:migrate:all && cross-env NODE_ENV=test nyc mocha --timeout 5000 './tests/*.js' --exit",
     "dev": "nodemon --exec babel-node src/app.js",
-    "start": "babel-node src/app.js",
+    "start": "node dist/app.js",
     "build": "rimraf dist/ && babel ./src -d dist",
     "db:migrate:prod": "./node_modules/.bin/sequelize db:migrate && ./node_modules/.bin/sequelize db:seed:all",
     "db:migrate:all": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
-    "coverage": "cross-env NODE_ENV=test nyc report --reporter=lcov --reporter=text-lcov | coveralls"
+    "coverage": "cross-env NODE_ENV=test nyc report --reporter=lcov --reporter=text-lcov | coveralls",
+    "heroku-postbuild": " npm run migrate:undo && npm run migrate",
+    "migrate:undo": "npx sequelize db:migrate:undo",
+    "migrate": "cross-env NODE_ENV=production npx sequelize db:migrate"
+
   },
   "repository": {
     "type": "git",
@@ -27,13 +31,6 @@
   },
   "homepage": "https://github.com/justinefe/voting-system#readme",
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.6.4",
-    "@babel/node": "^7.0.0",
-    "@babel/plugin-transform-regenerator": "^7.4.5",
-    "@babel/plugin-transform-runtime": "^7.4.4",
-    "@babel/preset-env": "^7.6.3",
-    "@babel/register": "^7.7.7",
     "babel-eslint": "^10.0.2",
     "coveralls": "^3.0.7",
     "eslint": "^6.1.0",
@@ -49,7 +46,15 @@
     "sinon-chai": "^3.4.0"
   },
   "dependencies": {
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.6.4",
+    "@babel/node": "^7.8.4",
+    "@babel/plugin-transform-regenerator": "^7.4.5",
+    "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.6.3",
+    "@babel/register": "^7.7.7",
+    "@babel/runtime": "^7.8.4",
     "@sendgrid/mail": "^6.4.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
@@ -66,6 +71,7 @@
     "passport": "^0.4.1",
     "passport-facebook": "^3.0.0",
     "passport-twitter": "^1.0.4",
+    "pg": "^7.18.2",
     "sequelize": "^5.21.2",
     "sequelize-cli": "^5.5.1",
     "sinon": "^8.0.4",
