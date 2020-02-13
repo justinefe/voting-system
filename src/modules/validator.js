@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { getMIlliSeconds, getDay } from '../utils';
+import { getMIlliSeconds } from '../utils';
 
 /**
  *

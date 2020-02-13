@@ -60,14 +60,14 @@ module.exports = {
     createdAt: {
       allowNull: false,
       type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'created_at'
+      // defaultValue: Sequelize.NOW,
+      // field: 'created_at'
     },
     updatedAt: {
       allowNull: false,
       type: Sequelize.DATE,
-      defaultValue: Sequelize.NOW,
-      field: 'updated_at'
+      // defaultValue: Sequelize.NOW,
+      // field: 'updated_at'
     }
   }),
   down: (queryInterface) => queryInterface.dropTable('Users')
