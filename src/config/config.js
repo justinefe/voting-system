@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 
 
 config();
-console.log(process.env.PASSWORD, process.env.USER, process.env.DEV_DATABASE, '==== Password');
 
 module.exports = {
   development: {
@@ -20,9 +19,9 @@ module.exports = {
     dialect: 'mysql'  
   },
   production: {
-    username: process.env.USER,
+    username: process.env.USERNAME,
     password: process.env.PASSWORD,
-    database: process.env.PRODUCTION_DATABASE,
+    database: process.env.CLEARDB_DATABASE_URL,
     host: '127.0.0.1',
     dialect: 'mysql'
   }
