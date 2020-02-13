@@ -8,6 +8,7 @@ import { inValidEmail, inValidPassword, magicTrimmer } from '../modules/validato
 import sendEmail from '../services/emails';
 import { hashPassword, unhashPassword } from '../utils/hashPassword';
 import userInfo from '../utils/getUserInfo';
+import models from '../models'
 
 
 /**
@@ -41,15 +42,18 @@ class AuthController {
           }
         );
         newUser.token = token;
-        // const link = `${protocol}//${headers.host}/api/v1/auth/confirm_email?token=${token}&id=${newUser.uuid}`;
-        // await sendEmail(
-        //   email,
-        //   'Thejust Online Voting System Verification',
-        //   `Please kindly click on the link below to verify your account <br/> ${link}`
-        // );
+        const link = `${protocol}//${headers.host}/api/v1/auth/confirm_email?token=${token}&id=${newUser.uuid}`;
+        await sendEmail(
+          email,
+          'Thejust Online Voting System Verification',
+          `Please kindly click on the link below to verify your account <br/> ${link}`
+        );
         const userInformation = {
           message: 'User account created successfully',
-          token
+          token,
+          uuid: newUser.uuid,
+          ...newUser,
+          password: null
         };
         sendSuccessResponse(res, 201, userInformation);
       } else {
@@ -154,6 +158,7 @@ class AuthController {
     );
     const userInformation = {
       token,
+      uuid: foundUser.uuid,
     };
     return sendSuccessResponse(res, 200, userInformation);
   }
@@ -173,15 +178,22 @@ class AuthController {
   async sendResetLink(req, res) {
     const { email } = req.body;
     if (!inValidEmail(email)) {
-      const { uuid } = await UserRepository.getOne({ email });
+      const findUser = await UserRepository.getOne({ email });
+
+      if (!findUser) return sendErrorResponse(res, 404, 'User not found');
+
+      const { uuid } = findUser;
+
       const token = await createToken({ uuid, email });
-      const link = `${req.protocol}//${req.headers.host}/api/v1/auth/reset_password/${uuid}/${token}`;
+      console.log('vvvvvvvvvvvvvvvvvvvvvvvv', token);
+      const link = `${req.protocol}//${req.headers.host}/api/v1/auth/change_password?token=${token}`;
       try {
         await sendEmail(
           email,
           'Thejust Password Reset',
           `Please kindly click the link below to reset your password <br/> ${link}`
         );
+
         return successResponse(res, 200, 'A password reset link has been sent to your mailbox');
       } catch (error) {
         return sendErrorResponse(res, 500, 'Unable to perform the operation at the moment');
@@ -203,7 +215,8 @@ class AuthController {
    */
   async resetPassword(req, res, next) {
     const { password } = req.body;
-    const { uuid } = req.params;
+    const { token } = req.params;
+    const { uuid } = await verifyToken(token);
     if (!inValidPassword(password)) {
       try {
         await UserRepository.update(uuid, { password });

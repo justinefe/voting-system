@@ -26,26 +26,17 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false
     },
-    // is_partisan: {
-    //   type: DataTypes.BOOLEAN,
-    //   defaultValue: false
-    // },
     gender: DataTypes.STRING,
     voted: DataTypes.STRING,
     date_of_birth: DataTypes.STRING,
     createdAt: {
       type: DataTypes.DATE,
-      field: 'created_at'
     }, 
     updatedAt: {
       type: DataTypes.DATE,
-      filed: 'updated_at'
     }
-  }, {
-    underscored: true,
-    sequelize,
-    modelName: 'user'
-  });
+  }, 
+  );
   User.associate = (models) => {
     // associations can be defined here
     User.hasMany(models.candidate, {

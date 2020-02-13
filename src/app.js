@@ -1,6 +1,6 @@
 import http from 'http';
 import express from 'express';
-import socket from 'socket.io';
+// import socket from 'socket.io';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import route from './routes';
@@ -13,7 +13,7 @@ import route from './routes';
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static('public'));
+// app.use(express.static('public'));
 app.use(cors());
 
 /**
