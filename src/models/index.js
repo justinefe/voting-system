@@ -4,10 +4,12 @@ import path from 'path';
 import Sequelize from 'sequelize';
 import enVariables from '../config/config';
 
+console.log(enVariabless)
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = enVariables[env];
 const db = {};
+
 
 let sequelize;
 if (config.use_env_variable) {
