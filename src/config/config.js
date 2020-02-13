@@ -2,7 +2,6 @@ import { config } from 'dotenv';
 
 
 config();
-console.log(process.env.PASSWORD, process.env.USER, process.env.DEV_DATABASE, '==== Password');
 
 module.exports = {
   development: {
