@@ -22,7 +22,7 @@ const sendEmail = async (receiver, subject, content) => {
     html: content,
   };
   try {
-    return sgMail.send(data);
+    return await sgMail.send(data);
   } catch (error) {
     return error;
   }

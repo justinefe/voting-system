@@ -26,7 +26,7 @@ userRouter.post('/auth/signin', userAuth.signin, AuthController.signin);
 userRouter.get('/auth/signout', authenticateUser, AuthController.signout);
 
 userRouter.post('/auth/forgot_password', AuthController.sendResetLink);
-userRouter.put('/auth/reset_password/:uuid/:token', AuthController.resetPassword);
+userRouter.put('/auth/reset_password', AuthController.resetPassword);
 
 userRouter.get('/users', authenticateUser, verifyRoles.verifySupAdmin, AdminCrontroller.getUsers);
 userRouter.get('/users/:email', authenticateUser, verifyRoles.verifySupAdmin, AdminCrontroller.getUser);
