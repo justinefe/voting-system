@@ -60,6 +60,7 @@ class AuthController {
         return sendErrorResponse(res, 409, `User ${email} already exists`);
       }
     } catch (err) {
+      console.log(err, 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');
       return next(err);
     }
   }
