@@ -8,6 +8,7 @@ import { inValidEmail, inValidPassword, magicTrimmer } from '../modules/validato
 import sendEmail from '../services/emails';
 import { hashPassword, unhashPassword } from '../utils/hashPassword';
 import userInfo from '../utils/getUserInfo';
+import models from '../models'
 
 
 /**
@@ -185,7 +186,6 @@ class AuthController {
       const { uuid } = findUser;
 
       const token = await createToken({ uuid, email });
-      console.log('vvvvvvvvvvvvvvvvvvvvvvvv', token);
       const link = `${req.protocol}//${req.headers.host}/api/v1/auth/change_password?token=${token}`;
       try {
         await sendEmail(
